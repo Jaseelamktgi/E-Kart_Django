@@ -332,6 +332,12 @@ input:focus{
 .cart-page{
     margin: 80px auto;
 }
+.empty-cart{
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 80px auto;
+}
 table{
     width: 100%;
     border-collapse: collapse;

@@ -26,16 +26,22 @@
             <p>Home / {{product.title}}</p>
             <h1>{{product.title}}</h1>
             <h4>₹ {{product.price}}</h4>
-            <select>
-                <option>Select Size</option>
-                <option>XXL</option>
-                <option>XL</option>
-                <option>L</option>
-                <option>M</option>
-                <option>S</option>
-            </select>
-            <input type="number" value="1">
-            <a href="{% url 'cart' %}" class="btn">Add To Cart</a>
+
+            <!-- Add to Cart Form -->
+            <form method="post" action="{% url 'add_to_cart'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <select name="size" required>
+                    <option value="">Select Size</option>
+                    <option value="XXL">XXL</option>
+                    <option value="XL">XL</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="S">S</option>
+                </select>
+                <input type="hidden" name="product_id" value="{{product.id}}">
+                <input type="number" name="quantity" value="1" min="1">
+                <button type="submit" class="btn">Add To Cart</button>
+            </form>
 
             <h3>Product Details <i class="fa fa-indent"></i></h3>
             <br>
