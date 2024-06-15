@@ -2,58 +2,88 @@
 {% load static %}
 <!-- block content -->
 {% block content %}
-        <!-- Account Page -->
-        <div class="account-page">
-            <div class="container">
-                <div class="row">
-                    <div class="col-2">
-                        <img src="{% static 'images/image1.png' %}" width="100%">
+<!-- Account Page -->
+<div class="account-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <img src="{% static 'images/image1.png' %}" width="100%">
+            </div>
+            <div class="col-2">
+                <!-- Display error messages -->
+                <div class="message_container">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="col-2">
-                        <div class="form-container">
-                            <div class="form-btn">
-                                <span onclick="login()">Login</span>
-                                <span onclick="register()">Register</span>
-                                <hr id="Indicator">
-                            </div>
-                            <form id="LoginForm">
-                                <input type="text" placeholder="Username">
-                                <input type="password" placeholder="Password">
-                                <button type="submit" class="btn">Login</button>
-                                <a href="">Forget Password</a>
-                            </form>
-    
-                            <form id="RegForm">
-                                <input type="text" placeholder="Username">
-                                <input type="email" placeholder="Email">
-                                <input type="password" placeholder="Password">
-                                <button type="submit" class="btn">Register</button>
-                            </form>
-                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-container">
+                    <div class="form-btn">
+                        <span onclick="login()">Login</span>
+                        <span onclick="register()">Register</span>
+                        <hr id="Indicator">
                     </div>
+
+                    <!-- LoginForm -->
+                    <form id="LoginForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" placeholder="Username" name="username" required>
+                        <input type="password" placeholder="Password" name="password" required>
+                        <button type="submit" class="btn" name="login">Login</button>
+                        <a href="">Forget Password</a>
+                    </form>
+
+                    <!-- RegisterForm -->
+                    <form id="RegForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" placeholder="Username" name="username" min="3" maxlength="10" required>
+                        <input type="email" placeholder="Email" name="email" required>
+                        <input type="password" placeholder="Password" name="password" minlength="6" required>
+                        <input type="text" placeholder="Address" name="address" minlength="6" required>
+                        <input type="number" placeholder="Phone No" name="phone" pattern="\d{10}" required>
+                        <button type="submit" class="btn" name="register">Register</button>
+                    </form>
                 </div>
             </div>
         </div>
-    
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_scripts %}
-    <!-- Toggle Form -->
+<!-- Toggle Form -->
+<script>
+    var LoginForm = document.getElementById("LoginForm");
+    var RegForm = document.getElementById("RegForm");
+    var Indicator = document.getElementById("Indicator");
+    function register() {
+        RegForm.style.transform = "translatex(0px)";
+        LoginForm.style.transform = "translatex(0px)";
+        Indicator.style.transform = "translateX(100px)";
+
+    }
+    function login() {
+        RegForm.style.transform = "translatex(300px)";
+        LoginForm.style.transform = "translatex(300px)";
+        Indicator.style.transform = "translate(0px)";
+
+    }
+</script>
+
+<!-- Tab Indicator based on login/register -->
+{% if register %}
     <script>
-        var LoginForm = document.getElementById("LoginForm");
-        var RegForm = document.getElementById("RegForm");
-        var Indicator = document.getElementById("Indicator");
-        function register() {
-            RegForm.style.transform = "translatex(0px)";
-            LoginForm.style.transform = "translatex(0px)";
-            Indicator.style.transform = "translateX(100px)";
-
-        }
-        function login() {
-            RegForm.style.transform = "translatex(300px)";
-            LoginForm.style.transform = "translatex(300px)";
-            Indicator.style.transform = "translate(0px)";
-
-        }
+        register();
     </script>
+    {% else %}
+    <script>
+        login();
+    </script>
+{% endif %}
 {% endblock %}
