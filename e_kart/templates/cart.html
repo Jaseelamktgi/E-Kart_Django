@@ -4,6 +4,17 @@
 {% load cart_subtotal %}
 <!-- block content -->
 {% block content %}
+
+<!-- Display error messages -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <!-- Cart items details -->
 <div class="small-container cart-page">
     {% if cart and cart.added_items.all %}
@@ -49,7 +60,12 @@
                 <td>₹ {% cart_subtotal cart %}</td>
             </tr> -->
             <tr >
-                <td colspan="2"> <button class="btn btn-danger " >Checkout</button>
+                <td colspan="2"> 
+                    <form method="post" enctype="multipart/form-data" action="{% url 'checkout_cart' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="total" value="{% cart_subtotal cart %}">
+                        <button class="btn btn-danger " type="submit" >Checkout</button>
+                    </form>
                 </td>
             </tr>
 
