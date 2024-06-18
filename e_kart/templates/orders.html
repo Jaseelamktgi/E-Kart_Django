@@ -1,5 +1,6 @@
 {% extends 'blank_layout.html' %}
 {% load static %}
+{% load order_status %}
 
 <!-- block content -->
 {% block content %}
@@ -27,7 +28,7 @@
                     {{order.total_price}}
                 </td>
                 <td>
-                    {{order.order_status}}
+                    {% order_status order.order_status %}
                 </td>
 
             </tr>
